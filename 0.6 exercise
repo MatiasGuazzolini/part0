@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant user 
+    participant browser 
+    participant server 
+
+    user->>browser: Type note in the input field
+    user->>browser: Click on the Save button
+
+    Note right of browser: The browser captures the event and sends the note via an AJAX request (fetch)
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa (with the new note in JSON)
+    activate server
+    Note right of server: The server receives the new note in JSON format and stores it
+    server-->>browser: Confirmation that the note was received
+    deactivate server
+
+    Note right of browser: The browser updates the list of notes dynamically without reloading the page
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json (optional, if the app requests all notes)
+    activate server
+    server-->>browser: JSON with all notes, including the new one [{ "content": "New note", "date": "2024-9-10" }, ...]
+    deactivate server
+
+    Note right of browser: The browser renders the new note in the list without reloading the page
